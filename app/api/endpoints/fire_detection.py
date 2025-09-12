@@ -6,6 +6,7 @@ import keras
 
 router = APIRouter()
 
+
 # Load model once at startup
 model = keras.models.load_model("app/local/xception_final.keras")
 
