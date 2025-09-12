@@ -3,9 +3,9 @@ from typing import List
 import numpy as np
 import cv2
 import keras
+from collections import Counter  # <-- added
 
 router = APIRouter()
-
 
 # Load model once at startup
 model = keras.models.load_model("app/local/xception_final.keras")
@@ -25,19 +25,25 @@ async def fire_detection(files: List[UploadFile] = File(...)):
     """
     Fire detection endpoint.
     Accepts one or multiple image files.
-    Returns fire=1 or no_fire=0 for each file.
+    Returns majority vote (fire=1, no_fire=0) across all files.
     """
-    results = []
+    predictions = []
+
     for file in files:
         contents = await file.read()
         nparr = np.frombuffer(contents, np.uint8)
         frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
         if frame is None:
-            results.append({"filename": file.filename, "result": None})
-            continue
+            continue  # skip invalid images
 
-        result = analyse_frame(frame)
-        results.append({"filename": file.filename, "result": result})
+        predictions.append(analyse_frame(frame))
 
-    return {"detections": results}
+    if not predictions:
+        return {"result": None, "message": "No valid images uploaded."}
+
+    # Compute majority vote
+    vote = Counter(predictions)
+    majority_result = vote.most_common(1)[0][0]
+
+    return {"result": majority_result, "votes": dict(vote)}
