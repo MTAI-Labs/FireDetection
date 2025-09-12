@@ -18,7 +18,7 @@ SET log_statement = 'mod';
 SET log_min_duration_statement = 1000; -- Log queries taking more than 1 second
 
 -- Performance settings for API workloads
-SET shared_preload_libraries = 'pg_stat_statements';
+-- SET shared_preload_libraries = 'pg_stat_statements';
 SET track_activity_query_size = 2048;
 SET track_io_timing = on;
 

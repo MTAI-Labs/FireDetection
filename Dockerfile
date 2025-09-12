@@ -8,6 +8,8 @@ ARG ENVIRONMENT=production
 RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
+    libgl1 \
+    libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
 # Create and activate virtual environment
@@ -32,6 +34,8 @@ RUN groupadd -r appuser && useradd -r -g appuser appuser
 # Install runtime dependencies
 RUN apt-get update && apt-get install -y \
     curl \
+    libgl1 \
+    libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 

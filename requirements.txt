@@ -27,3 +27,7 @@ faker==20.1.0
 # Documentation generation
 openapi-generator-cli==7.1.0
 pydoc-markdown==4.8.2
+numpy
+opencv-python
+keras
+tensorflow
